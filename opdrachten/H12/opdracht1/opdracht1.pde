@@ -1,23 +1,32 @@
+BankAccount persoon;
+
 void setup() {
-  size(500, 500);
-  Rectangle r = new Rectangle(100, 100, 250, 250);
-  r.display();
+  rekening = new Person("Hugo", 12, "mannetje");
+  persoon.toonNaam();
+  persoon.toonLeeftijd();
+  persoon.toonGeslacht();
 }
 
-class Rectangle {
-  float x;
-  float y;
-  float breedte;
-  float hoogte;
-
-  Rectangle(float x, float y, float breedte, float hoogte) {
-    this.x = x;
-    this.y = y;
-    this.breedte = breedte;
-    this.hoogte = hoogte;
+class BankAccount {
+  String eigenaar;
+  int rekeningNummer;
+  int saldo;
+  
+  rekening(String eigenaar, int rekeningNummer, int saldo) {
+    this.eigenaar = eigenaar;
+    this.rekeningNummer = rekeningNummer;
+    this.saldo = saldo;
   }
 
-  void display() {
-    rect(x, y, breedte, hoogte);
+  void toonNaam() {
+    println("Naam: " + naam);
+  }
+
+  void toonLeeftijd() {
+    println("Leeftijd: " + leeftijd);
+  }
+  
+  void toonGeslacht() {
+    println("Geslacht: " + geslacht);
   }
 }
