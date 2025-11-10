@@ -5,11 +5,12 @@ int[] snakeX = new int[200];
 int[] snakeY = new int[200];
 int length;
 int dirX, dirY;
-int foodX, foodY;
 int score = 0;
 
 boolean playing = false;
 boolean gameOver = false;
+
+Food food;
 
 void settings() {
   size(cols * grid, rows * grid);
@@ -17,6 +18,7 @@ void settings() {
 
 void setup() {
   frameRate(10);
+  food = new Food();
   resetGame();
 }
 
@@ -43,10 +45,10 @@ void draw() {
   snakeX[0] += dirX;
   snakeY[0] += dirY;
 
-  if (snakeX[0] == foodX && snakeY[0] == foodY) {
+  if (snakeX[0] == food.x && snakeY[0] == food.y) {
     length++;
     score++;
-    spawnFood();
+    food.respawn();
   }
 
   if (snakeX[0] < 0 || snakeY[0] < 0 || snakeX[0] >= cols || snakeY[0] >= rows) endGame();
@@ -54,13 +56,12 @@ void draw() {
     if (snakeX[0] == snakeX[i] && snakeY[0] == snakeY[i]) endGame();
   }
 
-  fill(255, 0, 0);
-  rect(foodX * grid, foodY * grid, grid, grid);
-
   fill(0, 255, 0);
   for (int i = 0; i < length; i++) {
     rect(snakeX[i] * grid, snakeY[i] * grid, grid, grid);
   }
+
+  food.show();
 
   fill(255);
   textAlign(LEFT, TOP);
@@ -76,10 +77,19 @@ void keyPressed() {
     return;
   }
 
-  if (keyCode == UP && dirY == 0) { dirX = 0; dirY = -1; }
-  if (keyCode == DOWN && dirY == 0) { dirX = 0; dirY = 1; }
-  if (keyCode == LEFT && dirX == 0) { dirX = -1; dirY = 0; }
-  if (keyCode == RIGHT && dirY == 0) { dirX = 1; dirY = 0; }
+  if (keyCode == UP && dirY == 0) {
+    dirX = 0;
+    dirY = -1;
+  } else if (keyCode == DOWN && dirY == 0) {
+    dirX = 0;
+    dirY = 1;
+  } else if (keyCode == LEFT && dirX == 0) {
+    dirX = -1;
+    dirY = 0;
+  } else if (keyCode == RIGHT && dirX == 0) {
+    dirX = 1;
+    dirY = 0;
+  }
 }
 
 void resetGame() {
@@ -93,17 +103,30 @@ void resetGame() {
     snakeX[i] = 10 - i;
     snakeY[i] = 10;
   }
-  spawnFood();
-}
-
-void spawnFood() {
-  foodX = int(random(cols));
-  foodY = int(random(rows));
+  food.respawn();
 }
 
 void endGame() {
   playing = false;
   gameOver = true;
   noLoop();
-  loop(); 
+  loop();
+}
+
+class Food {
+  int x, y;
+
+  Food() {
+    respawn();
+  }
+
+  void respawn() {
+    x = int(random(cols));
+    y = int(random(rows));
+  }
+
+  void show() {
+    fill(255, 0, 0);
+    rect(x * grid, y * grid, grid, grid);
+  }
 }
